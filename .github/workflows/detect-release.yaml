@@ -44,12 +44,12 @@ jobs:
       contents: read
       packages: write
     needs: get-version
-    if: jobs.get-version.is-new-version == 'true'
+    if: needs.get-version.outputs.is-new-version == 'true'
     steps:
       - uses: actions/checkout@v3
         with:
           repository: misskey-dev/misskey
-          ref: ${{ jobs.get-version.version }}
+          ref: ${{ needs.get-version.outputs.version }}
 
       # Setup QEMU to support arm64 image building
       - name: Set up QEMU
