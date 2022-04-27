@@ -33,12 +33,15 @@ jobs:
         run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
       - name: Commit latest version
         if: steps.git-check.outputs.modified == 'true'
-        run: |
+        run: |-
           git config --global user.name 'Jared Allard'
           git config --global user.email 'jaredallard@users.noreply.github.com'
           git add -A latest.txt
           git commit -m "$(cat latest.txt)" latest.txt
+          git tag "$(cat latest.txt)"
           git push
+          git push "refs/tags/$(cat latest.txt)"
+          gh release create "$(cat latest.txt)" --notes "$(cat latest.txt)"
 
   build-push-docker:
     name: Build and Push Docker Image to GHCR
@@ -70,12 +73,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN  }}
-      - name: Docker meta
-        id: meta_ghcr
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.GHCR_IMAGE }}
-
       - name: Push to GHCR
         uses: docker/build-push-action@v2
         with:
@@ -84,5 +81,4 @@ jobs:
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: ${{ steps.meta_ghcr.outputs.tags }}
-          labels: ${{ steps.meta_ghcr.outputs.labels }}
+          tags: ${{ env.GHCR_IMAGE }}:${{ needs.get-version.outputs.version }}
