@@ -72,9 +72,6 @@ jobs:
         with:
           images: ${{ env.GHCR_IMAGE }}
 
-      # While this builds, it's a no-op because we just built it
-      # before. We're just using build again to push from the buildkit
-      # builder setup earlier.
       - name: Push to GHCR
         uses: docker/build-push-action@v2
         with:
