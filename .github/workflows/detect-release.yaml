@@ -33,7 +33,7 @@ jobs:
         run: |
           git config --global user.name 'Jared Allard'
           git config --global user.email 'jaredallard@users.noreply.github.com'
-          git commit -am ""
+          git commit -am "${{ steps.version.version }}"
           git push
 
   build-push-docker:
