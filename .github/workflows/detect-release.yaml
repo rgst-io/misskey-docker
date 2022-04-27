@@ -35,7 +35,8 @@ jobs:
         run: |
           git config --global user.name 'Jared Allard'
           git config --global user.email 'jaredallard@users.noreply.github.com'
-          git commit -am "${{ steps.version.version }}"
+          git add -A latest.txt
+          git commit -m "${{ steps.version.version }}" latest.txt
           git push
 
   build-push-docker:
