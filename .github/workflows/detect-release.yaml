@@ -40,7 +40,7 @@ jobs:
           git commit -m "$(cat latest.txt)" latest.txt
           git tag "$(cat latest.txt)"
           git push
-          git push "refs/tags/$(cat latest.txt)"
+          git push origin "refs/tags/$(cat latest.txt)"
           gh release create "$(cat latest.txt)" --notes "$(cat latest.txt)"
 
   build-push-docker:
