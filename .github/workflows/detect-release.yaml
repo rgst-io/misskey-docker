@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      version: ${{ steps.version.version }}
+      version: ${{ steps.version.outputs.version }}
       is-new-version: ${{ steps.git-check.outputs.modified }}
     steps:
       - uses: actions/checkout@v3
